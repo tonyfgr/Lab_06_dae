@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cambiar Precio por Categoría</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+
+        .page-title {
+            background-color: #FF5733; /* Fondo rojo */
+            color: white; /* Texto en blanco */
+            padding: 10px; /* Espaciado interno */
+            border-radius: 5px; /* Bordes redondeados */
+        }
+
+        .btn-primary {
+            background-color: #FF5733; /* Fondo rojo */
+            border-color: #FF5733; /* Borde rojo */
+        }
+
+        .table {
+            background-color: #F2F2F2; /* Fondo gris claro */
+        }
+
+        .table thead th {
+            background-color: #343a40; /* Fondo gris oscuro */
+            color: white; /* Texto en blanco */
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5 mx-auto"> <!-- Agregada la clase mx-auto para centrar -->
+        <h1 class="page-title mb-4">Cambiar Precio por Categoría</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="categoria">Categoría:</label>
+                <select class="form-control" id="categoria" name="categoria">
+                    {% for categoria_con_productos in categorias_con_productos %}
+                        <option value="{{ categoria_con_productos.categoria.id }}">{{ categoria_con_productos.categoria.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="nuevo_precio">Nuevo Precio:</label>
+                <input type="number" class="form-control" id="nuevo_precio" name="nuevo_precio" min="0" step="0.01">
+            </div>
+            <button type="submit" class="btn btn-primary">Cambiar Precio</button>
+        </form>
+        <h2 class="mt-4">Productos por Categoría</h2>
+        {% for categoria_con_productos in categorias_con_productos %}
+            <h3>{{ categoria_con_productos.categoria.nombre }}</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for producto in categoria_con_productos.productos %}
+                        <tr>
+                            <td>{{ producto.nombre }}</td>
+                            <td>{{ producto.precio }}</td>
+                            <td>{{ producto.stock }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+    </div>
+</body>
+</html>
+
